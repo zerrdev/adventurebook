@@ -1,5 +1,6 @@
 package com.pictet.adventurebookapi.parser;
 
+import com.pictet.adventurebookapi.infrastructure.parser.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

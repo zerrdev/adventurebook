@@ -1,6 +1,6 @@
-package com.pictet.adventurebookapi.controller;
+package com.pictet.adventurebookapi.application.controller;
 
-import com.pictet.adventurebookapi.model.Book;
+import com.pictet.adventurebookapi.domain.model.Book;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

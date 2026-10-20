@@ -1,4 +1,4 @@
-package com.pictet.adventurebookapi.model;
+package com.pictet.adventurebookapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
