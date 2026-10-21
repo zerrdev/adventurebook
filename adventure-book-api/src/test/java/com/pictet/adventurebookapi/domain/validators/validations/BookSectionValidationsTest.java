@@ -34,7 +34,8 @@ class BookSectionValidationsTest {
     void ensureEmptySectionsAreReported() {
         final var book = book();
 
-        assertEquals(List.of("Sections cannot be empty", "A book cannot have less than one end"),
+        assertEquals(List.of("Sections cannot be empty", "A book cannot have less than one begin",
+                        "A book cannot have less than one end"),
                 bookSectionValidations.validate(book));
     }
 
@@ -51,9 +52,10 @@ class BookSectionValidationsTest {
     @Test
     void ensureEachExtraDuplicateIsReported() {
         final var book = book(
-                section(1),
-                section(1),
-                section(1));
+                section(1, 2),
+                section(1, 2),
+                section(1, 2),
+                section(2));
 
         assertEquals(List.of("Duplicate section ID: 1", "Duplicate section ID: 1"),
                 bookSectionValidations.validate(book));
@@ -123,6 +125,35 @@ class BookSectionValidationsTest {
     }
 
     @Test
+    void ensureMissingBeginIsReported() {
+        final var book = book(
+                section(1, 2),
+                section(2));
+        book.getSections().get(0).setType(BookSectionType.NODE);
+
+        assertEquals(List.of("A book cannot have less than one begin"), bookSectionValidations.validate(book));
+    }
+
+    @Test
+    void ensureNonEndingSectionWithoutOptionsIsReported() {
+        final var deadEnd = section(2);
+        deadEnd.setType(BookSectionType.NODE);
+        final var book = book(section(1, 2, 3), deadEnd, section(3));
+
+        assertEquals(List.of("Non-ending section without options: 2"), bookSectionValidations.validate(book));
+    }
+
+    @Test
+    void ensureNonEndingSectionWithNullOptionsIsReported() {
+        final var deadEnd = section(2);
+        deadEnd.setType(BookSectionType.NODE);
+        deadEnd.setOptions(null);
+        final var book = book(section(1, 2, 3), deadEnd, section(3));
+
+        assertEquals(List.of("Non-ending section without options: 2"), bookSectionValidations.validate(book));
+    }
+
+    @Test
     void ensureValidFixtureHasNoErrors() {
         final var book = parse("books/the-prisoner.json");
 
@@ -145,6 +176,10 @@ class BookSectionValidationsTest {
         book.setId(1);
         book.setTitle("Test book");
         book.setSections(List.of(sections));
+        // a valid book needs one BEGIN, so the helper marks the first section when no section is BEGIN
+        if (sections.length > 0 && Arrays.stream(sections).noneMatch(s -> BookSectionType.BEGIN.equals(s.getType()))) {
+            sections[0].setType(BookSectionType.BEGIN);
+        }
         return book;
     }
 

@@ -36,6 +36,10 @@ public class BookSectionValidations implements BookValidation {
             }
         }
 
+        if (beginCount < 1) {
+            errors.add("A book cannot have less than one begin");
+        }
+
         if (beginCount > 1) {
             errors.add("A book cannot have more than one begin");
         }
@@ -50,6 +54,11 @@ public class BookSectionValidations implements BookValidation {
                 .map(BookSectionOption::getGotoId)
                 .filter(gotoId -> !sections.containsKey(gotoId))
                 .forEach(gotoId -> errors.add("Invalid section gotoId: %d".formatted(gotoId)));
+
+        book.getSections().stream()
+                .filter(section -> !BookSectionType.END.equals(section.getType()))
+                .filter(section -> section.getOptions() == null || section.getOptions().isEmpty())
+                .forEach(section -> errors.add("Non-ending section without options: %d".formatted(section.getId())));
 
         return errors;
     }
