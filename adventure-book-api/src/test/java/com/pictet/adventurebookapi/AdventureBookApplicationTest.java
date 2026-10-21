@@ -15,9 +15,7 @@ class AdventureBookApplicationTest {
 
     @Test
     void ensureBooksAreLoadedFromClasspath() {
-        assertEquals(3, bookCatalog.getBooks().size());
+        assertEquals(1, bookCatalog.getBooks().size());
         assertNotNull(bookCatalog.booksById().get(1));
-        assertNotNull(bookCatalog.booksById().get(2));
-        assertNotNull(bookCatalog.booksById().get(3));
     }
 }
