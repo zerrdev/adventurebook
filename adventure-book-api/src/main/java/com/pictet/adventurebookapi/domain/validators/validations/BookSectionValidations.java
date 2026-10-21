@@ -3,6 +3,7 @@ package com.pictet.adventurebookapi.domain.validators.validations;
 import com.pictet.adventurebookapi.domain.model.Book;
 import com.pictet.adventurebookapi.domain.model.BookSection;
 import com.pictet.adventurebookapi.domain.model.BookSectionOption;
+import com.pictet.adventurebookapi.domain.model.BookSectionType;
 import com.pictet.adventurebookapi.domain.validators.BookValidation;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,8 @@ public class BookSectionValidations implements BookValidation {
     public List<String> validate(Book book) {
         ArrayList<String> errors = new ArrayList<>();
         Map<Integer, BookSection> sections = new HashMap<>();
+        int beginCount = 0;
+        int endCount = 0;
 
         if (book.getSections().isEmpty()) {
             errors.add("Sections cannot be empty");
@@ -25,6 +28,20 @@ public class BookSectionValidations implements BookValidation {
             } else {
                 sections.put(bookSection.getId(), bookSection);
             }
+
+            if (BookSectionType.BEGIN.equals(bookSection.getType())) {
+                beginCount++;
+            } else if (BookSectionType.END.equals(bookSection.getType())) {
+                endCount++;
+            }
+        }
+
+        if (beginCount > 1) {
+            errors.add("A book cannot have more than one begin");
+        }
+
+        if (endCount < 1) {
+            errors.add("A book cannot have less than one end");
         }
 
         book.getSections().stream()

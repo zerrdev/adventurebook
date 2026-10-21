@@ -12,6 +12,6 @@ import java.util.List;
 public class BookSection {
     private Integer id;
     private String text;
-    private String type;
+    private BookSectionType type;
     private List<BookSectionOption> options;
 }

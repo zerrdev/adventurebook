@@ -2,6 +2,7 @@ package com.pictet.adventurebookapi.infrastructure.serialization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pictet.adventurebookapi.domain.model.Book;
+import com.pictet.adventurebookapi.domain.model.BookSectionType;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
@@ -36,7 +37,7 @@ class JsonBookParserTest {
         final var firstSection = book.getSections().getFirst();
         assertEquals(1, firstSection.getId());
         assertNotNull(firstSection.getText());
-        assertEquals("BEGIN", firstSection.getType());
+        assertEquals(BookSectionType.BEGIN, firstSection.getType());
         assertEquals(2, firstSection.getOptions().size());
     }
 
@@ -71,7 +72,7 @@ class JsonBookParserTest {
         final var book = jsonBookParser.parseBookResource(positiveCaseResource).orElseThrow();
 
         final var lastSection = book.getSections().getLast();
-        assertEquals("END", lastSection.getType());
+        assertEquals(BookSectionType.END, lastSection.getType());
         assertNull(lastSection.getOptions());
     }
 

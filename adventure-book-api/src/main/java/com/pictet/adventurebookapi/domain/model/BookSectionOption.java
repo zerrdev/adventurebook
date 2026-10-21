@@ -10,4 +10,5 @@ import lombok.Setter;
 public class BookSectionOption {
     private String description;
     private Integer gotoId;
+    private BookSectionOptionConsequence consequence;
 }

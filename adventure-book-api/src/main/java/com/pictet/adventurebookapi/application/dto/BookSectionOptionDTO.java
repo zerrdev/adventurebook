@@ -6,4 +6,5 @@ import lombok.Data;
 public class BookSectionOptionDTO {
     private String description;
     private Integer gotoId;
+    private BookSectionOptionConsequenceDTO consequence;
 }

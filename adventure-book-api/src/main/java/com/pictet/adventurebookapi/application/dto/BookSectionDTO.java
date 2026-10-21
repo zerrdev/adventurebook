@@ -1,5 +1,6 @@
 package com.pictet.adventurebookapi.application.dto;
 
+import com.pictet.adventurebookapi.domain.model.BookSectionType;
 import lombok.Data;
 
 import java.util.List;
@@ -8,6 +9,6 @@ import java.util.List;
 public class BookSectionDTO {
     private Integer id;
     private String text;
-    private String type;
+    private BookSectionType type;
     private List<BookSectionOptionDTO> options;
 }

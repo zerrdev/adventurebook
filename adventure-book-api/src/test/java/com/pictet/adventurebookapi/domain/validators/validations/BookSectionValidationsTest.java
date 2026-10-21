@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pictet.adventurebookapi.domain.model.Book;
 import com.pictet.adventurebookapi.domain.model.BookSection;
 import com.pictet.adventurebookapi.domain.model.BookSectionOption;
+import com.pictet.adventurebookapi.domain.model.BookSectionType;
 import com.pictet.adventurebookapi.infrastructure.serialization.JsonBookParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -33,7 +34,8 @@ class BookSectionValidationsTest {
     void ensureEmptySectionsAreReported() {
         final var book = book();
 
-        assertEquals(List.of("Sections cannot be empty"), bookSectionValidations.validate(book));
+        assertEquals(List.of("Sections cannot be empty", "A book cannot have less than one end"),
+                bookSectionValidations.validate(book));
     }
 
     @Test
@@ -94,9 +96,30 @@ class BookSectionValidationsTest {
 
         assertEquals(List.of(
                         "Duplicate section ID: 1",
+                        "A book cannot have less than one end",
                         "Invalid section gotoId: 7",
                         "Invalid section gotoId: 8"),
                 bookSectionValidations.validate(book));
+    }
+
+    @Test
+    void ensureMissingEndIsReported() {
+        final var book = book(
+                section(1, 2),
+                section(2, 1));
+
+        assertEquals(List.of("A book cannot have less than one end"), bookSectionValidations.validate(book));
+    }
+
+    @Test
+    void ensureMultipleBeginsAreReported() {
+        final var first = section(1, 3);
+        first.setType(BookSectionType.BEGIN);
+        final var second = section(2, 3);
+        second.setType(BookSectionType.BEGIN);
+        final var book = book(first, second, section(3));
+
+        assertEquals(List.of("A book cannot have more than one begin"), bookSectionValidations.validate(book));
     }
 
     @Test
@@ -129,6 +152,8 @@ class BookSectionValidationsTest {
         final var section = new BookSection();
         section.setId(id);
         section.setOptions(Arrays.stream(gotoIds).map(BookSectionValidationsTest::option).toList());
+        // a section without options is a dead end, so the helper marks it as an END section
+        section.setType(gotoIds.length == 0 ? BookSectionType.END : BookSectionType.NODE);
         return section;
     }
 
