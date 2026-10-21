@@ -30,7 +30,11 @@ public class BookController {
     @GetMapping("/{bookId}")
     public BookDetailsDTO getBookById(@PathVariable final Integer bookId) {
         return bookService.findById(bookId)
-                .map(bookMapper::toDetailsDTO)
+                .map(book -> {
+                    final var details = bookMapper.toDetailsDTO(book);
+                    details.setUnreachableSections(bookService.getUnreachableSections(book));
+                    return details;
+                })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
     }
 }

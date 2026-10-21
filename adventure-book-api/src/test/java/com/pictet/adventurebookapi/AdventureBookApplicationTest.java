@@ -15,7 +15,17 @@ class AdventureBookApplicationTest {
 
     @Test
     void ensureBooksAreLoadedFromClasspath() {
-        assertEquals(1, bookCatalog.getBooks().size());
+        assertEquals(3, bookCatalog.getBooks().size());
         assertNotNull(bookCatalog.booksById().get(1));
+    }
+
+    @Test
+    void ensureInvalidBooksAreLoadedWithErrors() {
+        assertTrue(bookCatalog.booksById().get(1).isValid());
+        assertTrue(bookCatalog.booksById().get(1).getErrors().isEmpty());
+
+        assertFalse(bookCatalog.booksById().get(2).isValid());
+        assertFalse(bookCatalog.booksById().get(3).isValid());
+        assertTrue(bookCatalog.booksById().get(3).getErrors().contains("Invalid section gotoId: 50011"));
     }
 }

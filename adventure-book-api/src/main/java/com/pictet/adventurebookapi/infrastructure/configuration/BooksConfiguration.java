@@ -37,22 +37,23 @@ public class BooksConfiguration {
         final var bookList = Stream.of(resources)
                 .map(jsonBookParser::parseBookResource)
                 .flatMap(Optional::stream)
-                .filter(this::isValid)
+                .map(this::validate)
                 .toList();
 
         return new BookFileCatalog(bookList);
     }
 
-    private boolean isValid(Book book) {
+    private Book validate(Book book) {
         final var errors =bookValidations.stream()
                 .flatMap(validation -> validation.validate(book).stream())
                 .toList();
 
         if (!errors.isEmpty()) {
-            log.warn("Unable to load '{}': {}", book.getTitle(), errors);
+            log.warn("Book '{}' is invalid: {}", book.getTitle(), errors);
         }
 
-        return errors.isEmpty();
+        book.setErrors(errors);
+        return book;
     }
 
 }

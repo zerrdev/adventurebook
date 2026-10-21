@@ -9,4 +9,6 @@ public class BookDTO {
     private Integer id;
     private String title;
     private String author;
+    private boolean valid;
+    private List<String> errors;
 }
