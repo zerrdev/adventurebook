@@ -47,6 +47,7 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
         <div>
             <p>Health points: {game.healthPoints}</p>
             {error && <p>Error: {error}</p>}
+            {game.consequenceText && <p><em>{game.consequenceText}</em></p>}
             {section && <p>{section.text}</p>}
             {!finished && (
                 <ul>

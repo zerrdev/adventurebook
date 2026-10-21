@@ -1,4 +1,12 @@
-import { BookDTO, ChooseOptionDTO, CreateGameDTO, GameDTO, GameOptionsDTO, GameSectionDTO } from './types';
+import {
+    BookDetailsDTO,
+    BookDTO,
+    ChooseOptionDTO,
+    CreateGameDTO,
+    GameDTO,
+    GameOptionsDTO,
+    GameSectionDTO,
+} from './types';
 
 const BASE_URL = '/api';
 
@@ -8,12 +16,16 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
         headers: { 'Content-Type': 'application/json' },
     });
     if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`);
+        // the API answers errors with a ProblemDetail body; show its detail when there is one
+        const problem = await response.json().catch(() => undefined);
+        throw new Error(problem?.detail ?? `${response.status} ${response.statusText}`);
     }
     return response.json();
 };
 
 export const getBooks = () => request<BookDTO[]>('/books');
+
+export const getBook = (bookId: number) => request<BookDetailsDTO>(`/books/${bookId}`);
 
 export const createGame = (body: CreateGameDTO) =>
     request<GameDTO>('/game/', { method: 'POST', body: JSON.stringify(body) });

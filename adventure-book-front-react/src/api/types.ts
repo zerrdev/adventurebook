@@ -6,6 +6,12 @@ export interface BookDTO {
     id: number;
     title: string;
     author: string;
+    valid: boolean;
+    errors: string[];
+}
+
+export interface BookDetailsDTO extends BookDTO {
+    unreachableSections: number[];
 }
 
 export interface CreateGameDTO {
@@ -19,6 +25,7 @@ export interface GameDTO {
     sectionId: number;
     healthPoints: number;
     gameState?: GameState;
+    consequenceText?: string | null;
 }
 
 export interface GameOptionsDTO {
