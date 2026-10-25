@@ -1,5 +1,6 @@
 package com.pictet.adventurebookapi.application.controller;
 
+import com.pictet.adventurebookapi.domain.exceptions.InvalidBookException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,5 +24,10 @@ public class GameExceptionHandler {
     @ExceptionHandler(IllegalStateException.class)
     public ProblemDetail handleConflict(final IllegalStateException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidBookException.class)
+    public ProblemDetail handleInvalidBook(final InvalidBookException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }

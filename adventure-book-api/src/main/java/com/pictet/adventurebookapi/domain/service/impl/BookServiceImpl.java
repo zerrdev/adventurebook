@@ -1,14 +1,13 @@
 package com.pictet.adventurebookapi.domain.service.impl;
 
+import com.pictet.adventurebookapi.domain.exceptions.InvalidBookException;
 import com.pictet.adventurebookapi.domain.model.Book;
 import com.pictet.adventurebookapi.domain.model.BookSection;
-import com.pictet.adventurebookapi.domain.model.BookSectionOption;
 import com.pictet.adventurebookapi.domain.model.BookSectionType;
 import com.pictet.adventurebookapi.domain.repository.BookRepository;
 import com.pictet.adventurebookapi.domain.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ServerErrorException;
 
 import java.util.*;
 import java.util.function.Function;
@@ -34,7 +33,7 @@ public class BookServiceImpl implements BookService {
     public BookSection getBookBeginSection(Book book) {
         return book.getSections().stream()
                 .filter(s -> BookSectionType.BEGIN.equals(s.getType())).findFirst()
-                .orElseThrow(() -> new ServerErrorException("Misconfigured book: has no begin section", null));
+                .orElseThrow(() -> new InvalidBookException("Misconfigured book: has no begin section"));
     }
 
     @Override
