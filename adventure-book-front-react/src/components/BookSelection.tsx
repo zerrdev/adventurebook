@@ -37,13 +37,13 @@ const BookSelection: React.FC<Props> = ({ onStart }) => {
     }, [bookId]);
 
     if (error) {
-        return <p>Could not load books: {error}</p>;
+        return <p className="error">Could not load books: {error}</p>;
     }
 
     const selected = books.find(book => book.id === bookId);
 
     return (
-        <div>
+        <div className="selection">
             <h2>Choose a book</h2>
             <select value={bookId ?? ''} onChange={e => setBookId(Number(e.target.value))}>
                 {books.map(book => (

@@ -53,14 +53,14 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
     const finished = isFinished(game, section);
 
     return (
-        <div>
-            <p>Health points: {game.healthPoints}</p>
-            {error && <p>Error: {error}</p>}
+        <div className="game">
+            <p className="health">Health points: {game.healthPoints}</p>
+            {error && <p className="error">Error: {error}</p>}
             {game.consequenceText && <p><em>{game.consequenceText}</em></p>}
             {section && <p>{section.text}</p>}
             {loading && <p role="status">Loading...</p>}
             {!loading && !finished && (
-                <ul>
+                <ul className="options">
                     {options.map(option => (
                         <li key={option.gotoId}>
                             <button onClick={() => choose(option.gotoId)}>{option.description}</button>

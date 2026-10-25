@@ -3,6 +3,7 @@ import { createGame } from './api/client';
 import { GameDTO } from './api/types';
 import BookSelection from './components/BookSelection';
 import GamePlay from './components/GamePlay';
+import './App.css';
 
 const playerId = Math.random().toString(36).substring(2);
 
@@ -20,9 +21,9 @@ const App: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="app">
             <h1>Adventure Book</h1>
-            {error && <p>Could not start game: {error}</p>}
+            {error && <p className="error">Could not start game: {error}</p>}
             {game
                 ? <GamePlay key={game.gameId} initialGame={game} onRestart={() => setGame(undefined)} />
                 : <BookSelection onStart={start} />}
