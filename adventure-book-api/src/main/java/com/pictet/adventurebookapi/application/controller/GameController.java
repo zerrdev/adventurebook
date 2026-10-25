@@ -7,6 +7,7 @@ import com.pictet.adventurebookapi.application.dto.GameOptionsDTO;
 import com.pictet.adventurebookapi.application.dto.GameSectionDTO;
 import com.pictet.adventurebookapi.application.mapper.GameMapper;
 import com.pictet.adventurebookapi.domain.service.GameService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class GameController {
     private final GameMapper gameMapper;
 
     @PostMapping("/")
-    public GameDTO newGame(@RequestBody final CreateGameDTO createGameDTO) {
+    public GameDTO newGame(@Valid @RequestBody final CreateGameDTO createGameDTO) {
         final var game = gameService.start(createGameDTO.getPlayerId(), createGameDTO.getBookId());
 
         return gameMapper.toDto(game);
@@ -47,7 +48,7 @@ public class GameController {
     }
 
     @PostMapping("/choose/{gameId}")
-    public GameDTO chooseOption(@PathVariable final String gameId, @RequestBody final ChooseOptionDTO chooseOptionDTO) {
+    public GameDTO chooseOption(@PathVariable final String gameId, @Valid @RequestBody final ChooseOptionDTO chooseOptionDTO) {
         return gameMapper.toDto(gameService.chooseOption(gameId, chooseOptionDTO.getGotoId()));
     }
 
