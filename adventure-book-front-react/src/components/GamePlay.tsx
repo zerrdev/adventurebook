@@ -53,21 +53,23 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
     const finished = isFinished(game, section);
 
     return (
-        <div className="game">
-            {!finished && <button className="game-exit" onClick={onRestart}>Give up</button>}
-            <p className="health">Health points: {game.healthPoints}</p>
-            {error && <p className="error">Error: {error}</p>}
+        <section aria-label="Gameplay">
+            <nav aria-label="Game status and exit">
+                <ul><li><strong>Health points: {game.healthPoints}</strong></li></ul>
+                {!finished && <ul><li><button className="secondary outline" onClick={onRestart}>Give up</button></li></ul>}
+            </nav>
+            {error && <p role="alert"><strong>Error:</strong> {error}</p>}
             {game.consequenceText && <p><em>{game.consequenceText}</em></p>}
             {section && <p>{section.text}</p>}
-            {loading && <p role="status">Loading...</p>}
+            {loading && <p role="status" aria-busy="true">Loading...</p>}
             {!loading && !finished && (
-                <ul className="options">
+                <fieldset aria-label="Choices">
                     {options.map(option => (
-                        <li key={option.gotoId}>
+                        <div role="group" key={option.gotoId}>
                             <button onClick={() => choose(option.gotoId)}>{option.description}</button>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </fieldset>
             )}
             {!loading && finished && (
                 <div>
@@ -75,7 +77,7 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
                     <button onClick={onRestart}>New game</button>
                 </div>
             )}
-        </div>
+        </section>
     );
 };
 

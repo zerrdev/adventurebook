@@ -51,31 +51,31 @@ const BookExplorer: React.FC<Props> = ({ bookId, onExit }) => {
     };
 
     return (
-        <div className="game explorer">
-            {error && <p className="error" role="alert">{error}</p>}
+        <section aria-label="Exploration">
+            {error && <p role="alert">{error}</p>}
             {!loading && !error && nodes.length === 0 && <p>This book has no story to explore.</p>}
             {node && <>
                 <p>{node.text}</p>
             </>}
-            {loading && <p role="status">Loading...</p>}
+            {loading && <p role="status" aria-busy="true">Loading...</p>}
             {!loading && node && <>
-                <ul className="options">
-                    {node.options.map((option, index) => <li key={index}>
+                <fieldset aria-label="Choices">
+                    {node.options.map((option, index) => <div role="group" key={index}>
                         <button disabled={loading} onClick={() => navigate(option.gotoId)}>
                             {option.description}
                         </button>
-                    </li>)}
-                </ul>
+                    </div>)}
+                </fieldset>
                 {node.options.length === 0 && (node.type === 'END'
                     ? <h3>The end.</h3>
                     : <p>No choices available here.</p>)}
             </>}
-            <div className="selection-actions">
-                <button disabled={loading || history.length === 0}
+            <div role="group" aria-label="Exploration navigation">
+                <button className="secondary" disabled={loading || history.length === 0}
                     onClick={() => navigate(history[history.length - 1], true)}>Back</button>
-                <button onClick={onExit}>Back to books</button>
+                <button className="secondary outline" onClick={onExit}>Back to books</button>
             </div>
-        </div>
+        </section>
     );
 };
 

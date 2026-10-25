@@ -38,22 +38,23 @@ const BookSelection: React.FC<Props> = ({ onStart, onExplore }) => {
     }, [bookId]);
 
     if (error) {
-        return <p className="error">Could not load books: {error}</p>;
+        return <p role="alert"><strong>Could not load books:</strong> {error}</p>;
     }
 
     const selected = books.find(book => book.id === bookId);
 
     return (
-        <div className="selection">
-            <h2>Choose a book</h2>
-            <select value={bookId ?? ''} onChange={e => setBookId(Number(e.target.value))}>
+        <section aria-labelledby="book-selection-title">
+            <h2 id="book-selection-title">Choose a book</h2>
+            <label htmlFor="book-selection">Book</label>
+            <select id="book-selection" value={bookId ?? ''} onChange={e => setBookId(Number(e.target.value))}>
                 {books.map(book => (
                     <option key={book.id} value={book.id}>
                         {book.title} - {book.author}{book.valid ? '' : ' (invalid)'}
                     </option>
                 ))}
             </select>
-            <div className="selection-actions">
+            <div role="group" aria-label="Book actions">
                 <button
                     disabled={selected === undefined || !selected.valid}
                     onClick={() => selected !== undefined && onStart(selected.id)}
@@ -61,6 +62,7 @@ const BookSelection: React.FC<Props> = ({ onStart, onExplore }) => {
                     Start game
                 </button>
                 <button
+                    className="secondary"
                     disabled={selected === undefined}
                     onClick={() => selected !== undefined && onExplore(selected.id)}
                 >
@@ -80,7 +82,7 @@ const BookSelection: React.FC<Props> = ({ onStart, onExplore }) => {
             {details && details.unreachableSections.length > 0 && (
                 <p>Unreachable sections: {details.unreachableSections.join(', ')}</p>
             )}
-        </div>
+        </section>
     );
 };
 
