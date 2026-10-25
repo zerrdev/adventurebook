@@ -11,6 +11,5 @@ public class BookDetailsDTO {
     private String author;
     private boolean valid;
     private List<String> errors;
-    private List<BookSectionDTO> sections;
     private List<Integer> unreachableSections;
 }
