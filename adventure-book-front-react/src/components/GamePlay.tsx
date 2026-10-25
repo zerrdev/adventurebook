@@ -15,8 +15,11 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
     const [section, setSection] = useState<GameSectionDTO>();
     const [options, setOptions] = useState<GameOptionsDTO[]>([]);
     const [error, setError] = useState<string>();
+    const [loading, setLoading] = useState(true);
 
     const load = useCallback(async (current: GameDTO) => {
+        setLoading(true);
+        setOptions([]);
         try {
             setError(undefined);
             const currentSection = await getGameSection(current.gameId);
@@ -24,6 +27,8 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
             setOptions(isFinished(current, currentSection) ? [] : await getGameOptions(current.gameId));
         } catch (e) {
             setError((e as Error).message);
+        } finally {
+            setLoading(false);
         }
     }, []);
 
@@ -32,16 +37,20 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
     }, [initialGame, load]);
 
     const choose = async (gotoId: number) => {
+        setLoading(true);
+        setError(undefined);
         try {
             const updated = await chooseOption(game.gameId, { gotoId });
             setGame(updated);
             await load(updated);
         } catch (e) {
             setError((e as Error).message);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const finished = isFinished(game, section) || (section !== undefined && options.length === 0);
+    const finished = isFinished(game, section);
 
     return (
         <div>
@@ -49,7 +58,8 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
             {error && <p>Error: {error}</p>}
             {game.consequenceText && <p><em>{game.consequenceText}</em></p>}
             {section && <p>{section.text}</p>}
-            {!finished && (
+            {loading && <p role="status">Loading...</p>}
+            {!loading && !finished && (
                 <ul>
                     {options.map(option => (
                         <li key={option.gotoId}>
@@ -58,7 +68,7 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
                     ))}
                 </ul>
             )}
-            {finished && (
+            {!loading && finished && (
                 <div>
                     <h3>{game.healthPoints <= 0 ? 'You died. Game over.' : 'The end.'}</h3>
                     <button onClick={onRestart}>New game</button>
