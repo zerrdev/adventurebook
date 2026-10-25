@@ -6,6 +6,8 @@ import {
     GameDTO,
     GameOptionsDTO,
     GameSectionDTO,
+    ExplorationNode,
+    ExplorationNodeSummary,
 } from './types';
 
 const BASE_URL = '/api';
@@ -26,6 +28,12 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
 export const getBooks = () => request<BookDTO[]>('/books');
 
 export const getBook = (bookId: number) => request<BookDetailsDTO>(`/books/${bookId}`);
+
+export const getExplorationNodes = (bookId: number) =>
+    request<ExplorationNodeSummary[]>(`/books/${bookId}/explore`);
+
+export const getExplorationNode = (bookId: number, nodeId: number) =>
+    request<ExplorationNode>(`/books/${bookId}/explore/${nodeId}`);
 
 export const createGame = (body: CreateGameDTO) =>
     request<GameDTO>('/game/', { method: 'POST', body: JSON.stringify(body) });

@@ -14,6 +14,16 @@ export interface BookDetailsDTO extends BookDTO {
     unreachableSections: number[];
 }
 
+export interface ExplorationNodeSummary {
+    id: number;
+    type?: BookSectionType | null;
+}
+
+export interface ExplorationNode extends ExplorationNodeSummary {
+    text: string;
+    options: GameOptionsDTO[];
+}
+
 export interface CreateGameDTO {
     playerId: string;
     bookId: number;

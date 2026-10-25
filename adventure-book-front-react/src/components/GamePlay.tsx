@@ -54,6 +54,7 @@ const GamePlay: React.FC<Props> = ({ initialGame, onRestart }) => {
 
     return (
         <div className="game">
+            {!finished && <button className="game-exit" onClick={onRestart}>Give up</button>}
             <p className="health">Health points: {game.healthPoints}</p>
             {error && <p className="error">Error: {error}</p>}
             {game.consequenceText && <p><em>{game.consequenceText}</em></p>}

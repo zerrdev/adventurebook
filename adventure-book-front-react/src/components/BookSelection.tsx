@@ -4,9 +4,10 @@ import { BookDetailsDTO, BookDTO } from '../api/types';
 
 interface Props {
     onStart: (bookId: number) => void;
+    onExplore: (bookId: number) => void;
 }
 
-const BookSelection: React.FC<Props> = ({ onStart }) => {
+const BookSelection: React.FC<Props> = ({ onStart, onExplore }) => {
     const [books, setBooks] = useState<BookDTO[]>([]);
     const [bookId, setBookId] = useState<number>();
     const [details, setDetails] = useState<BookDetailsDTO>();
@@ -52,12 +53,20 @@ const BookSelection: React.FC<Props> = ({ onStart }) => {
                     </option>
                 ))}
             </select>
-            <button
-                disabled={selected === undefined || !selected.valid}
-                onClick={() => selected !== undefined && onStart(selected.id)}
-            >
-                Start game
-            </button>
+            <div className="selection-actions">
+                <button
+                    disabled={selected === undefined || !selected.valid}
+                    onClick={() => selected !== undefined && onStart(selected.id)}
+                >
+                    Start game
+                </button>
+                <button
+                    disabled={selected === undefined}
+                    onClick={() => selected !== undefined && onExplore(selected.id)}
+                >
+                    Explore
+                </button>
+            </div>
             {selected && !selected.valid && (
                 <div>
                     <p>This book is invalid and cannot be played:</p>
