@@ -1,0 +1,14 @@
+:80 {
+    encode gzip
+
+    @api path /api /api/*
+    handle @api {
+        reverse_proxy server:9090
+    }
+
+    handle {
+        root * /srv
+        try_files {path} /index.html
+        file_server
+    }
+}

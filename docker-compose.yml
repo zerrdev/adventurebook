@@ -1,0 +1,21 @@
+services:
+  server:
+    image: maven:3.9-eclipse-temurin-21
+    working_dir: /workspace
+    command: mvn -B -pl adventure-book-api spring-boot:run
+    #ports:
+      #- "9090:9090"
+    volumes:
+      - .:/workspace
+      - maven-cache:/root/.m2
+
+  client:
+    build:
+      context: ./adventure-book-front-react
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+
+volumes:
+  maven-cache:
