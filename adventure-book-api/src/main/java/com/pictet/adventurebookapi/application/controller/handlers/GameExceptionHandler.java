@@ -1,5 +1,6 @@
-package com.pictet.adventurebookapi.application.controller;
+package com.pictet.adventurebookapi.application.controller.handlers;
 
+import com.pictet.adventurebookapi.application.controller.GameController;
 import com.pictet.adventurebookapi.domain.exceptions.InvalidBookException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
